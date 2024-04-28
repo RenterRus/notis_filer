@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = "/api;api";
+
+
+service Notes{
+    rpc Upsert(UpsertRequest) returns (UpsertResponse) {}
+    rpc Read(ReadRequest) returns (ReadResponse) {}
+}
+
+message UpsertRequest {
+    message Files{
+        string filename = 1;
+        string message = 2;
+    }
+    repeated Files files = 1;
+}
+
+message UpsertResponse {
+    message Files{
+        string message = 1;
+        string created_at = 2;
+        string updated_at = 3;
+    }
+    repeated Files files = 1;
+}
+
+message ReadRequest {
+    string filename = 1;
+}
+
+message ReadResponse {
+    string message = 1;
+    string created_at = 2;
+    string updated_at = 3;
+}
