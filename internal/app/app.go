@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"notis_filer/internal/filer"
 	"notis_filer/internal/server"
 	"path/filepath"
 	"strings"
@@ -108,7 +109,9 @@ func (a *App) Run() error {
 	}
 	s := grpc.NewServer()
 
-	pkg.RegisterNotesServer(s, server.NewService())
+	pkg.RegisterNotesServer(s, server.NewService(
+		filer.NewFiler(),
+	))
 
 	common.ColorPrintln(common.ForegBlack, common.BackGreen, " successfully ")
 
