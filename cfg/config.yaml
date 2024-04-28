@@ -1,6 +1,6 @@
 GRPC:
   Addr: "127.0.0.1:9061"
 
-BaseDir: "/opt/kek"
+BaseDir: "/data/kek"
 
 LogLvl: 0

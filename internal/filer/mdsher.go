@@ -1,12 +1,18 @@
 package filer
 
 import (
+	"bufio"
 	"context"
 	"fmt"
-	"io"
 	"os"
+	"strings"
 
 	"github.com/rs/zerolog/log"
+)
+
+const (
+	fileMask = "../%s/%s/notis/%d_%s.md"
+	pathMask = "../%s/%s/notis"
 )
 
 func NewFiler(baseDir string) Filer {
@@ -19,15 +25,10 @@ type mdsher struct {
 	baseDir string
 }
 
-/*
-TODO: Научить создавать директории при необходимости
-*/
-
-const fileMask = "%s/%s/notis/%d_%s.md"
-
 func (m *mdsher) Upsert(ctx context.Context, files []Files, userID string) ([]FilesResponse, error) {
 	if files != nil {
 		resp := make([]FilesResponse, len(files))
+		os.MkdirAll(fmt.Sprintf(pathMask, m.baseDir, userID), os.ModePerm)
 
 		for i := range files {
 			file, err := os.Create(fmt.Sprintf(fileMask, m.baseDir, userID, files[i].Topic, files[i].Filename))
@@ -54,20 +55,22 @@ func (m *mdsher) Upsert(ctx context.Context, files []Files, userID string) ([]Fi
 	return nil, ErrFilesEmpty
 }
 func (m *mdsher) Read(ctx context.Context, rd ReadData) (string, error) {
+	/*mess, err := os.ReadFile(fmt.Sprintf(fileMask, m.baseDir, rd.UserID, rd.Topic, rd.FileName))
+	return string(mess), err*/
+
 	file, err := os.Open(fmt.Sprintf(fileMask, m.baseDir, rd.UserID, rd.Topic, rd.FileName))
 	if err != nil {
 		return "", ErrFilesCannotRead
 	}
 	defer file.Close()
 
-	message := make([]byte, 64)
+	scanner := bufio.NewScanner(file)
 
-	for {
-		_, err := file.Read(message)
-		if err == io.EOF {
-			break
-		}
+	var sb strings.Builder
+
+	for scanner.Scan() {
+		sb.WriteString(scanner.Text())
 	}
 
-	return string(message), nil
+	return sb.String(), scanner.Err()
 }

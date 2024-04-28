@@ -22,7 +22,7 @@ func NewService(mdsher filer.Filer) *noteServer {
 
 func (n *noteServer) Upsert(ctx context.Context, in *api.UpsertRequest) (*api.UpsertResponse, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok || md.Get("X-User")[0] == "" {
+	if !ok || len(md.Get("X-User")) == 0 {
 		return nil, fmt.Errorf("Upsert: %w", ErrUserNotFound)
 	}
 
@@ -34,7 +34,7 @@ func (n *noteServer) Upsert(ctx context.Context, in *api.UpsertRequest) (*api.Up
 
 func (n *noteServer) Read(ctx context.Context, in *api.ReadRequest) (*api.ReadResponse, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok || md.Get("X-User")[0] == "" {
+	if !ok || len(md.Get("X-User")) == 0 {
 		return nil, fmt.Errorf("Read: %w", ErrUserNotFound)
 	}
 

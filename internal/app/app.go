@@ -48,6 +48,11 @@ func (a *App) Run() error {
 	common.ColorPrintln(common.ForegBlack, common.BackLightGrey, " Prepare initialized ")
 	defer common.ColorPrintln(common.ForegOrange, common.BackStd, "Module Run has been stopped")
 
+	//
+	// Config
+	//
+	common.ColorPrint(common.ForegDarkGreen, common.BackStd, "STAGE 1. Config ")
+
 	pflag.Parse()
 	if *showHelp {
 		pflag.Usage()
@@ -78,6 +83,13 @@ func (a *App) Run() error {
 		a.Stop(err)
 	}
 
+	common.ColorPrintln(common.ForegBlack, common.BackGreen, " successfully ")
+
+	//
+	// Log
+	//
+	common.ColorPrint(common.ForegDarkGreen, common.BackStd, "STAGE 2. Zero logger ")
+
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
 	switch a.config.LogLvl {
@@ -97,10 +109,12 @@ func (a *App) Run() error {
 		zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	}
 
+	common.ColorPrintln(common.ForegBlack, common.BackGreen, " successfully ")
+
 	//
 	// gRPC
 	//
-	common.ColorPrint(common.ForegDarkGreen, common.BackStd, "STAGE 1. gRPC ")
+	common.ColorPrint(common.ForegDarkGreen, common.BackStd, "STAGE 3. gRPC ")
 
 	listener, err := net.Listen("tcp", a.GRPC.Addr)
 	if err != nil {
