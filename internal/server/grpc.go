@@ -38,7 +38,11 @@ func (n *noteServer) Read(ctx context.Context, in *api.ReadRequest) (*api.ReadRe
 		return nil, fmt.Errorf("Read: %w", ErrUserNotFound)
 	}
 
-	message, err := n.MDsher.Read(ctx, in.Filename, md.Get("X-User")[0])
+	message, err := n.MDsher.Read(ctx, filer.ReadData{
+		FileName: in.Filename,
+		UserID:   md.Get("X-User")[0],
+		Topic:    in.Topic,
+	})
 
 	return &api.ReadResponse{
 		Message: message,

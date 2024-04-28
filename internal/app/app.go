@@ -110,7 +110,7 @@ func (a *App) Run() error {
 	s := grpc.NewServer()
 
 	pkg.RegisterNotesServer(s, server.NewService(
-		filer.NewFiler(),
+		filer.NewFiler(a.BaseDir),
 	))
 
 	common.ColorPrintln(common.ForegBlack, common.BackGreen, " successfully ")

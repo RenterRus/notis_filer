@@ -12,6 +12,7 @@ message UpsertRequest {
     message Files{
         string filename = 1;
         string message = 2;
+        int64 topic = 3;
     }
     repeated Files files = 1;
 }
@@ -19,18 +20,15 @@ message UpsertRequest {
 message UpsertResponse {
     message Files{
         string message = 1;
-        string created_at = 2;
-        string updated_at = 3;
     }
     repeated Files files = 1;
 }
 
 message ReadRequest {
     string filename = 1;
+    int64 topic = 2;
 }
 
 message ReadResponse {
     string message = 1;
-    string created_at = 2;
-    string updated_at = 3;
 }

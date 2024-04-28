@@ -9,6 +9,7 @@ type GRPC struct {
 }
 
 type config struct {
-	GRPC   GRPC
-	LogLvl int `validate:"min=-1,max=5"`
+	GRPC    GRPC
+	LogLvl  int    `validate:"min=-1,max=5"`
+	BaseDir string `validate:"required"`
 }

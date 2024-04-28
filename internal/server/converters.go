@@ -11,6 +11,7 @@ func FilesToWorker(files []*api.UpsertRequest_Files) []filer.Files {
 		res[i] = filer.Files{
 			Filename: files[i].Filename,
 			Message:  files[i].Message,
+			Topic:    files[i].Topic,
 		}
 	}
 	return res
@@ -20,9 +21,7 @@ func WorkerResponseToFiles(files []filer.FilesResponse) []*api.UpsertResponse_Fi
 	res := make([]*api.UpsertResponse_Files, len(files))
 	for i := range files {
 		res[i] = &api.UpsertResponse_Files{
-			CreatedAt: files[i].CreatedAt.String(),
-			UpdatedAt: files[i].UpdatedAt.String(),
-			Message:   files[i].Message,
+			Message: files[i].Message,
 		}
 	}
 	return res
